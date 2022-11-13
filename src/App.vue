@@ -1,47 +1,50 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
   <main>
-    <TheWelcome />
+    <!-- heading -->
+    <header>
+      <img src="./assets/pinia-logo.svg" alt="pinia logo">
+      <h1>Pinia Tasks</h1>
+    </header>
+
+
+      <!-- Filter -->
+      <nav class="filter">
+        <button @click="filter = 'all'" >All tasks</button>
+        <button @click="filter = 'favs'" >Fav tasks</button>
+      </nav>
+    <!-- task list -->
+    <div class="task-list" v-if="filter === 'all'">
+      <p>You have {{taskStore.totalCount}} tasks left to do </p>
+      <div v-for="task in taskStore.tasks" :key="task.id">
+        <p>{{ task.title }}</p>
+        <TaskDetails :task="task" />
+      </div>
+    </div>
+
+    <!-- Fav Tasks -->
+    <div class="task-list" v-if="filter === 'favs'">
+      <p>You have {{taskStore.favCount}} favs left to do </p>
+      <div v-for="task in taskStore.favs" :key="task.id">
+        <p>{{ task.title }}</p>
+        <TaskDetails :task="task" />
+      </div>
+    </div>
   </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<script>
+import { useTaskStore } from './stores/TaskStore'
+import TaskDetails from './components/TaskDetails.vue'
+import { ref } from '@vue/reactivity'
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+export default {
+  components: { TaskDetails },
+  setup () {
+    const taskStore = useTaskStore()
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+    const filter = ref('all')
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+    return { taskStore , filter}
   }
 }
-</style>
+</script>
