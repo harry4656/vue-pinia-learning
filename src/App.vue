@@ -7,6 +7,10 @@
     </header>
 
 
+    <!--  new task form-->
+    <div class="new-task-form">
+      <NewTaskForm />
+    </div>
       <!-- Filter -->
       <nav class="filter">
         <button @click="filter = 'all'" >All tasks</button>
@@ -16,7 +20,6 @@
     <div class="task-list" v-if="filter === 'all'">
       <p>You have {{taskStore.totalCount}} tasks left to do </p>
       <div v-for="task in taskStore.tasks" :key="task.id">
-        <p>{{ task.title }}</p>
         <TaskDetails :task="task" />
       </div>
     </div>
@@ -25,7 +28,6 @@
     <div class="task-list" v-if="filter === 'favs'">
       <p>You have {{taskStore.favCount}} favs left to do </p>
       <div v-for="task in taskStore.favs" :key="task.id">
-        <p>{{ task.title }}</p>
         <TaskDetails :task="task" />
       </div>
     </div>
@@ -35,10 +37,11 @@
 <script>
 import { useTaskStore } from './stores/TaskStore'
 import TaskDetails from './components/TaskDetails.vue'
+import NewTaskForm from './components/TaskForm.vue'
 import { ref } from '@vue/reactivity'
 
 export default {
-  components: { TaskDetails },
+  components: { TaskDetails, NewTaskForm },
   setup () {
     const taskStore = useTaskStore()
 

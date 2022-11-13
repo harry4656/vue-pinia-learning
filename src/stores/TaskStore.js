@@ -21,5 +21,17 @@ export const useTaskStore = defineStore('taskStore', {
       // this key word not refer to state in arrow function.  state can be passed as argument.
       return state.tasks.length
     }
+  },
+  actions: {
+    addTask(task) {
+      this.tasks.push(task)
+    },
+    deleteTask(id) {
+      this.tasks = this.tasks.filter((task => task.id !== id))
+    },
+    toggleFav(id){
+      const task = this.tasks.find(task => task.id === id)
+      task.isFav = !task.isFav
+    }
   }
 }) 
